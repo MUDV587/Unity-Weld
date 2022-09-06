@@ -35,6 +35,9 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
+
+            BeginArea(new GUIContent("View"));
+
             var viewPropertyType = typeof(bool);
 
             var viewAdapterTypeNames = TypeResolver.GetAdapterIds(o => o.OutType == viewPropertyType);
@@ -45,8 +48,8 @@ namespace UnityWeld_Editor
 
             ShowAdapterMenu(
                 new GUIContent(
-                    "View adapter", 
-                    "Adapter that converts values sent from the view-model to the view."
+                    "Adapter", 
+                    "Adapter that converts values sent from the View-Model to the View."
                 ),
                 viewAdapterTypeNames,
                 targetScript.ViewAdapterId,
@@ -79,14 +82,18 @@ namespace UnityWeld_Editor
                 : DefaultFontStyle;
 
             ShowAdapterOptionsMenu(
-                "View adapter options",
+                "Options",
                 adapterType,
                 options => targetScript.ViewAdapterOptions = options,
                 targetScript.ViewAdapterOptions,
                 viewAdapterOptionsFade.faded
             );
 
+            EndArea();
+
             EditorGUILayout.Space();
+
+            BeginArea(new GUIContent("View-Model"));
 
             EditorStyles.label.fontStyle = viewModelPropertyPrefabModified
                 ? FontStyle.Bold 
@@ -98,14 +105,16 @@ namespace UnityWeld_Editor
             );
             ShowViewModelPropertyMenu(
                 new GUIContent(
-                    "View-model property", 
-                    "Property on the view-model to bind to."
+                    "Property", 
+                    "Property on the View-Model to bind to."
                 ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
                 property => property.PropertyType == adaptedViewPropertyType
             );
+
+            EndArea();
         }
 
         private void UpdatePrefabModifiedProperties()

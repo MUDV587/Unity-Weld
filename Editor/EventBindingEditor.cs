@@ -25,11 +25,14 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
+            BeginArea(new GUIContent("View"));
+
             EditorStyles.label.fontStyle = viewEventPrefabModified 
                 ? FontStyle.Bold 
                 : DefaultFontStyle;
 
             ShowEventMenu(
+                new GUIContent("Event", "Event on the View to bind to."),
                 UnityEventWatcher.GetBindableEvents(targetScript.gameObject)
                     .OrderBy(evt => evt.Name)
                     .ToArray(),
@@ -37,26 +40,33 @@ namespace UnityWeld_Editor
                 targetScript.ViewEventName
             );
 
+            EndArea();
+
+            EditorGUILayout.Space();
+
+            BeginArea(new GUIContent("View-Model"));
+
             EditorStyles.label.fontStyle = viewModelMethodPrefabModified 
                 ? FontStyle.Bold 
                 : DefaultFontStyle;
 
-            ShowMethodMenu(targetScript, TypeResolver.FindBindableMethods(targetScript));
+            ShowMethodMenu(new GUIContent("Method", "Method on the view - model to bind to."), targetScript, TypeResolver.FindBindableMethods(targetScript));
+
+            EndArea();
         }
 
         /// <summary>
         /// Draws the dropdown for selecting a method from bindableViewModelMethods
         /// </summary>
         private void ShowMethodMenu(
+            GUIContent label,
             EventBinding targetScript, 
             BindableMember<MethodInfo>[] bindableMethods
         )
         {
-            var tooltip = "Method on the view-model to bind to.";
-
             InspectorUtils.DoPopup(
                 new GUIContent(targetScript.ViewModelMethodName),
-                new GUIContent("View-model method", tooltip),
+                label,
                 m => m.ViewModelType + "/" + m.MemberName,
                 m => true,
                 m => m.ToString() == targetScript.ViewModelMethodName,

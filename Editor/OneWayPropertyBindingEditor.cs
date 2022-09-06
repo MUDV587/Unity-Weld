@@ -39,14 +39,17 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
-            var defaultLabelStyle = EditorStyles.label.fontStyle;
+            //var defaultLabelStyle = EditorStyles.label.fontStyle;
+
+            BeginArea(new GUIContent("View"));
+
             EditorStyles.label.fontStyle = viewPropertyPrefabModified 
                 ? FontStyle.Bold 
-                : defaultLabelStyle;
+                : DefaultFontStyle;
 
             Type viewPropertyType;
             ShowViewPropertyMenu(
-                new GUIContent("View property", "Property on the view to bind to"),
+                new GUIContent("Property", "Property on the View to bind to"),
                 PropertyFinder.GetBindableProperties(targetScript.gameObject),
                 updatedValue => targetScript.ViewPropertyName = updatedValue,
                 targetScript.ViewPropertyName,
@@ -65,12 +68,12 @@ namespace UnityWeld_Editor
 
             EditorStyles.label.fontStyle = viewAdapterPrefabModified 
                 ? FontStyle.Bold 
-                : defaultLabelStyle;
+                : DefaultFontStyle;
 
             ShowAdapterMenu(
                 new GUIContent(
-                    "View adapter", 
-                    "Adapter that converts values sent from the view-model to the view."
+                    "Adapter", 
+                    "Adapter that converts values sent from the View-Model to the View."
                 ),
                 viewAdapterTypeNames,
                 targetScript.ViewAdapterId,
@@ -79,7 +82,7 @@ namespace UnityWeld_Editor
                     // Get rid of old adapter options if we changed the type of the adapter.
                     if (newValue != targetScript.ViewAdapterId)
                     {
-                        Undo.RecordObject(targetScript, "Set view adapter options");
+                        Undo.RecordObject(targetScript, "Set view adapter Options");
                         targetScript.ViewAdapterOptions = null;
                     }
 
@@ -87,7 +90,7 @@ namespace UnityWeld_Editor
                         updatedValue => targetScript.ViewAdapterId = updatedValue,
                         targetScript.ViewAdapterId,
                         newValue,
-                        "Set view adapter"
+                        "Set View Adapter"
                     );
                 }
             );
@@ -100,21 +103,25 @@ namespace UnityWeld_Editor
 
             EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified 
                 ? FontStyle.Bold 
-                : defaultLabelStyle;
+                : DefaultFontStyle;
 
             ShowAdapterOptionsMenu(
-                "View adapter options", 
+                "Options", 
                 adapterType, 
                 options => targetScript.ViewAdapterOptions = options,
                 targetScript.ViewAdapterOptions,
                 viewAdapterOptionsFade.faded
             );
 
+            EndArea();
+
             EditorGUILayout.Space();
+
+            BeginArea(new GUIContent("View-Model"));
 
             EditorStyles.label.fontStyle = viewModelPropertyPrefabModified 
                 ? FontStyle.Bold 
-                : defaultLabelStyle;
+                : DefaultFontStyle;
 
             var adaptedViewPropertyType = AdaptTypeBackward(
                 viewPropertyType, 
@@ -122,8 +129,8 @@ namespace UnityWeld_Editor
             );
             ShowViewModelPropertyMenu(
                 new GUIContent(
-                    "View-model property", 
-                    "Property on the view-model to bind to."
+                    "Property", 
+                    "Property on the View-Model to bind To."
                 ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
@@ -131,9 +138,11 @@ namespace UnityWeld_Editor
                 property => property.PropertyType == adaptedViewPropertyType
             );
 
+            EndArea();
+
             GUI.enabled = guiPreviouslyEnabled;
 
-            EditorStyles.label.fontStyle = defaultLabelStyle;
+            //EditorStyles.label.fontStyle = DefaultFontStyle;
         }
 
         /// <summary>

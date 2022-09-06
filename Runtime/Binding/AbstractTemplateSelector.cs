@@ -10,7 +10,7 @@ namespace UnityWeld.Binding
 {
     public abstract class AbstractTemplateSelector : AbstractMemberBinding
     {
-        [Header("Set templates for collection")]
+        //[Header("Set templates for collection")]
         [SerializeField] private Template[] _templates;
         [SerializeField] private string viewModelPropertyName = string.Empty;
 

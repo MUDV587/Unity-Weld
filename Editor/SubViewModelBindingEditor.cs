@@ -29,6 +29,8 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
+            BeginArea(new GUIContent("Sub View-Model"));
+
             var bindableProperties = FindBindableProperties();
 
             EditorStyles.label.fontStyle = propertyPrefabModified 
@@ -37,8 +39,8 @@ namespace UnityWeld_Editor
 
             ShowViewModelPropertyMenu(
                 new GUIContent(
-                    "Sub view-model property", 
-                    "The property on the top level view model containing the sub view-model"
+                    "Property", 
+                    "The Property on the top level View-Model containing the Sub View-Model"
                 ),
                 bindableProperties,
                 updatedValue => 
@@ -52,6 +54,8 @@ namespace UnityWeld_Editor
                 targetScript.ViewModelPropertyName,
                 p => true
             );
+
+            EndArea();
         }
 
         private BindableMember<PropertyInfo>[] FindBindableProperties()

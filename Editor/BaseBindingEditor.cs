@@ -93,7 +93,7 @@ namespace UnityWeld_Editor
 
             if (_autoConnectionProperty != null)
             {
-                EditorGUILayout.PropertyField(_autoConnectionProperty);
+                EditorGUILayout.PropertyField(_autoConnectionProperty, new GUIContent("Auto Connect", "Automatically bind once on \"OnEnable()\""));
             }
 
             OnInspector();
@@ -165,6 +165,21 @@ namespace UnityWeld_Editor
         /// The string used to show that no option is selected in the property menu.
         /// </summary>
         private static readonly string NoneOptionString = "None";
+
+        protected void BeginArea(GUIContent label)
+        {
+            var style = EditorStyles.label.fontStyle;
+            EditorStyles.label.fontStyle = FontStyle.Bold;
+
+            EditorGUILayout.LabelField(label);
+            EditorGUI.indentLevel++;
+
+            EditorStyles.label.fontStyle = style;
+        }
+        protected void EndArea()
+        {
+            EditorGUI.indentLevel--;
+        }
 
         /// <summary>
         /// Display a popup menu for selecting a property from a view-model.
@@ -267,6 +282,7 @@ namespace UnityWeld_Editor
         /// Show dropdown for selecting a UnityEvent to bind to.
         /// </summary>
         protected void ShowEventMenu(
+            GUIContent label,
             BindableEvent[] events,
             Action<string> propertyValueSetter,
             string curPropertyValue
@@ -281,7 +297,7 @@ namespace UnityWeld_Editor
                 .ToArray();
 
             var newSelectedIndex = EditorGUILayout.Popup(
-                new GUIContent("View event", "Event on the view to bind to."),
+                label,
                 selectedIndex,
                 content
             );

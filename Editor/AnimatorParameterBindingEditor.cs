@@ -49,8 +49,10 @@ namespace UnityWeld_Editor
                 return;
             }
 
+            BeginArea(new GUIContent("View"));
+
             ShowAnimatorParametersMenu(
-                new GUIContent("View property", "Property on the view to bind to"),
+                new GUIContent("Property", "Property on the View to bind to"),
                 updatedValue =>
                 {
                     targetScript.AnimatorParameterName = updatedValue.Name;
@@ -74,7 +76,7 @@ namespace UnityWeld_Editor
             EditorStyles.label.fontStyle = viewAdapterPrefabModified ? FontStyle.Bold : DefaultFontStyle;
 
             ShowAdapterMenu(
-                new GUIContent("View adapter", "Adapter that converts values sent from the view-model to the view."),
+                new GUIContent("Adapter", "Adapter that converts Values sent from the View-Model to the View."),
                 viewAdapterTypeNames,
                 targetScript.ViewAdapterId,
                 newValue =>
@@ -100,30 +102,35 @@ namespace UnityWeld_Editor
             EditorStyles.label.fontStyle = viewAdapterOptionsPrefabModified ? FontStyle.Bold : DefaultFontStyle;
 
             ShowAdapterOptionsMenu(
-                "View adapter options",
+                "Options",
                 adapterType,
                 options => targetScript.ViewAdapterOptions = options,
                 targetScript.ViewAdapterOptions,
                 viewAdapterOptionsFade.faded
             );
 
+            EndArea();
+
             EditorGUILayout.Space();
+            
+            BeginArea(new GUIContent("View-Model"));
 
             EditorStyles.label.fontStyle = viewModelPropertyPrefabModified ? FontStyle.Bold : DefaultFontStyle;
 
             var adaptedViewPropertyType = AdaptTypeBackward(viewPropertyType, targetScript.ViewAdapterId);
             ShowViewModelPropertyMenu(
-                new GUIContent("View-model property", "Property on the view-model to bind to."),
+                new GUIContent("Property", "Property on the View-Model to bind to."),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
                 targetScript.ViewModelPropertyName,
                 property => property.PropertyType == adaptedViewPropertyType
             );
 
+            EndArea();
+
             GUI.enabled = guiPreviouslyEnabled;
 
-            EditorGUILayout.Space();
-
+            //EditorGUILayout.Space();
         }
 
         private void ShowAnimatorParametersMenu(

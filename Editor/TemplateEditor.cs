@@ -30,6 +30,8 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
+            BeginArea(new GUIContent("Template"));
+
             var availableViewModels = TypeResolver.TypesWithBindingAttribute
                 .Select(type => type.ToString())
                 .OrderBy(name => name)
@@ -46,8 +48,8 @@ namespace UnityWeld_Editor
 
             var newSelectedIndex = EditorGUILayout.Popup(
                 new GUIContent(
-                    "Template view model", 
-                    "Type of the view model that this template will be bound to when it is instantiated."
+                    "View-Model", 
+                    "Type of the View-Model that this Template will be bound to when it is instantiated."
                 ),
                 selectedIndex,
                 availableViewModels
@@ -66,6 +68,8 @@ namespace UnityWeld_Editor
                     : availableViewModels[newSelectedIndex],
                 "Set bound view-model for template"
             );
+
+            EndArea();
         }
 
         /// <summary>

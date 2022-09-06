@@ -23,14 +23,16 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
+            BeginArea(new GUIContent("Template"));
+
             EditorStyles.label.fontStyle = viewModelPrefabModified 
                 ? FontStyle.Bold 
                 : DefaultFontStyle;
 
             ShowViewModelPropertyMenu(
                 new GUIContent(
-                    "Template property", 
-                    "Property on the view model to use for selecting templates."
+                    "Property", 
+                    "Property on the View-Model to use for selecting Templates."
                 ),
                 TypeResolver.FindBindableProperties(targetScript),
                 updatedValue => targetScript.ViewModelPropertyName = updatedValue,
@@ -38,7 +40,9 @@ namespace UnityWeld_Editor
                 property => true
             );
 
-            EditorGUILayout.PropertyField(_templatesProperty, true);
+            EndArea();
+
+            EditorGUILayout.PropertyField(_templatesProperty, new GUIContent("Templates", "Templates for Collection"), true);
         }
 
         /// <summary>

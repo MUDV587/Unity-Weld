@@ -28,18 +28,29 @@ namespace UnityWeld_Editor
         {
             UpdatePrefabModifiedProperties();
 
-            EditorGUILayout.PropertyField(_templateInitialPoolCountProperty);
-            EditorGUILayout.PropertyField(_itemsContainerProperty);
-            EditorGUILayout.PropertyField(_templatesProperty, true);
-            
+            BeginArea(new GUIContent("View-Model"));
+
             EditorStyles.label.fontStyle = _viewModelPrefabModified ? FontStyle.Bold : DefaultFontStyle;
             ShowViewModelPropertyMenu(
-                new GUIContent("View-model property", "Property on the view-model to bind to."),
+                new GUIContent("Property", "Property on the View-Model to bind to."),
                 TypeResolver.FindBindableCollectionProperties(_targetScript),
                 updatedValue => _targetScript.ViewModelPropertyName = updatedValue,
                 _targetScript.ViewModelPropertyName,
                 property => true
             );
+
+            EndArea();
+
+            EditorGUILayout.Space();
+
+            BeginArea(new GUIContent("Templates Settings"));
+            
+            EditorGUILayout.PropertyField(_templateInitialPoolCountProperty, new GUIContent("Initial Pool Count"));
+            EditorGUILayout.PropertyField(_itemsContainerProperty, new GUIContent("Container"));
+
+            EditorGUILayout.PropertyField(_templatesProperty, new GUIContent("Templates", "Templates for Collection"), true);
+
+            EndArea();
         }
 
         /// <summary>
